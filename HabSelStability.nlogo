@@ -1,17 +1,30 @@
+;; TODO
+; Try making habitat selection work!
+
+;; DIRECTION QUESTIONS
+; Old model: turtles have traits, must match with environment. Is that the best approach here? Continuum of patch quality, or more categorical?
+; Do we care about disturbance rate?
+; How much of the landscape should be disturbed?
+; HOW TO DO THE LAG/DELAY
+; Birth/death? Linked to health, match with environment?
+
+globals [ match ]   ; For evaluating whether a patch is a good fit or not, nothing done with this yet.
+
 breed [beetles beetle]
 
-beetles-own [ health trait ]
+beetles-own [ health trait ]   ; Nothing done with these yet
 patches-own [ env ]
 
 to setup
-  ca
+  clear-all
   
   ask patches[
+    ; Continuous-ish environment, would something more binary work better?
     set env random 20
     set pcolor 53 + (env / 5)
   ]
   
-  create-beetles 100 [
+  create-beetles 10 [
     setxy random-xcor random-ycor
   ]
   
@@ -27,9 +40,29 @@ to go
 end
 
 to disturbance
+  ;; Do we care much about disturbance rate? It's a slider right now.
+  if ticks mod disturbance-rate = 0 [
+    ;; How many patches should be disturbed? 30 of them (randomly-selected) right now.
+    ask n-of 30 patches [
+      set env (env + random-normal 0 1)
+    ]
+  ]
+  ask patches [ set pcolor 53 + (env / 5) ]   ; Just cosmetic, so that we can actually visualize what each patch's environment is like
 end
 
 to dispersal
+  ask beetles [
+    ; Would be fun to trace their movement, to confirm that this is working
+    pen-down
+    ; HABITAT SELECTION
+    ; What about 'uphill/downhill'? The NetLogo Dictionary has some interesting code, which I'll try adapting here:
+    ; So right now, they move towards the patch with the lowest 'env' value
+    let best-target min-one-of patches in-radius search-radius [env]
+    if ([env] of best-target) < ([env] of patch-here) [
+      face best-target
+      forward 1 ; Can adjust this speed of movement, for the lag/delay stuff. OR, create a timer.
+    ]
+  ]
 end
 @#$#@#$#@
 GRAPHICS-WINDOW
@@ -92,6 +125,36 @@ NIL
 NIL
 NIL
 1
+
+SLIDER
+26
+94
+198
+127
+disturbance-rate
+disturbance-rate
+0
+50
+20
+10
+1
+NIL
+HORIZONTAL
+
+SLIDER
+23
+196
+195
+229
+search-radius
+search-radius
+0
+10
+5
+1
+1
+NIL
+HORIZONTAL
 
 @#$#@#$#@
 ## WHAT IS IT?
