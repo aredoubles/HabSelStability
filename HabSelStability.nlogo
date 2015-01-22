@@ -44,7 +44,7 @@ to disturbance
   if ticks mod disturbance-rate = 0 [
     ;; How many patches should be disturbed? 30 of them (randomly-selected) right now.
     ask n-of 30 patches [
-      set env (env + random-normal 0 1)
+      set env (env + random-normal 0 1)   ; Env value changes by a random number, drawn from a normal distribution, mean of 0 (nothing changes), SD of 1. No idea if this is a good way to model disturbance or not.
     ]
   ]
   ask patches [ set pcolor 53 + (env / 5) ]   ; Just cosmetic, so that we can actually visualize what each patch's environment is like
