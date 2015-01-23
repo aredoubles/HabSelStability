@@ -21,8 +21,7 @@ to setup
   ask patches[
     ; Continuous-ish environment, would something more binary work better?
     set env random 20
-    ;set pcolor 53 + (env / 5) ; Just cosmetic, so that we can actually visualize what each patch's environment is like
-    set pcolor scale-color 53 env -10 30
+    set pcolor scale-color 53 env -10 30 ; Just cosmetic, so that we can actually visualize what each patch's environment is like
   ]
   
   create-beetles 10 [
@@ -35,10 +34,8 @@ to setup
 end
 
 to go
-  
   disturbance
   dispersal
-  
   tick
 end
 
@@ -48,10 +45,10 @@ to disturbance
     ;; How many patches should be disturbed? 30 of them (randomly-selected) right now.
     ask n-of 30 patches [
       set env (env + random-normal 0 1)   ; Env value changes by a random number, drawn from a normal distribution, mean of 0 (nothing changes), SD of 1. No idea if this is a good way to model disturbance or not.
+      ; For synchronous change, plan on using 'neighbors' or 'in-radius' liberally
     ]
   ]
-  ;ask patches [ set pcolor 53 + (env / 5) ]   ; Again, cosmetic
-  ask patches [set pcolor scale-color 53 env -10 30 ]
+  ask patches [set pcolor scale-color 53 env -10 30 ]  ; Again, just cosmetic
 end
 
 to dispersal
@@ -59,7 +56,7 @@ to dispersal
     ; Would be fun to trace their movement, to confirm that this is working
     pen-down
     ; HABITAT SELECTION
-    ; What about 'uphill/downhill'? The NetLogo Dictionary has some interesting code, which I'll try adapting here:
+    ; The NetLogo Dictionary has some interesting code for 'uphill/downhill', which I'll try adapting here:
     ; So right now, they move towards the patch with the lowest 'env' value (darkest on the map)
     let best-target min-one-of patches in-radius search-radius [env]  ; search-radius is a slider
     if ([env] of best-target) < ([env] of patch-here) [
