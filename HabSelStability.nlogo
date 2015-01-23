@@ -41,7 +41,7 @@ end
 
 to disturbance
   ;; Do we care much about disturbance rate? It's a slider right now.
-  if ticks mod disturbance-rate = 0 [
+  if ticks mod disturbance-every = 0 [    ; Roundabout way to get disturbances to happen every x timesteps
     ;; How many patches should be disturbed? 30 of them (randomly-selected) right now.
     ask n-of 30 patches [
       set env (env + random-normal 0 1)   ; Env value changes by a random number, drawn from a normal distribution, mean of 0 (nothing changes), SD of 1. No idea if this is a good way to model disturbance or not.
@@ -131,8 +131,8 @@ SLIDER
 94
 198
 127
-disturbance-rate
-disturbance-rate
+disturbance-every
+disturbance-every
 0
 50
 20
