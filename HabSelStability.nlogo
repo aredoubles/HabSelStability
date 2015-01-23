@@ -42,10 +42,10 @@ end
 to disturbance
   ;; Do we care much about disturbance rate? It's a slider right now.
   if ticks mod disturbance-every = 0 [    ; Roundabout way to get disturbances to happen every x timesteps
-    ;; How many patches should be disturbed? 30 of them (randomly-selected) right now.
+    ;; How many patches should be disturbed? 30 of them (randomly-selected) right now, synchronously.
     ask n-of 30 patches [
       set env (env + random-normal 0 1)   ; Env value changes by a random number, drawn from a normal distribution, mean of 0 (nothing changes), SD of 1. No idea if this is a good way to model disturbance or not.
-      ; For synchronous change, plan on using 'neighbors' or 'in-radius' liberally
+      ; For synchronous and clumped change, plan on using 'neighbors' or 'in-radius' liberally
     ]
   ]
   ask patches [set pcolor scale-color 53 env -10 30 ]  ; Again, just cosmetic
