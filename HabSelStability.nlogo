@@ -21,11 +21,14 @@ to setup
   ask patches[
     ; Continuous-ish environment, would something more binary work better?
     set env random 20
-    set pcolor 53 + (env / 5) ; Just cosmetic, so that we can actually visualize what each patch's environment is like
+    ;set pcolor 53 + (env / 5) ; Just cosmetic, so that we can actually visualize what each patch's environment is like
+    set pcolor scale-color 53 env -10 30
   ]
   
   create-beetles 10 [
     setxy random-xcor random-ycor
+    set size 1.5
+    set pen-size 1.5
   ]
   
   reset-ticks
@@ -47,7 +50,8 @@ to disturbance
       set env (env + random-normal 0 1)   ; Env value changes by a random number, drawn from a normal distribution, mean of 0 (nothing changes), SD of 1. No idea if this is a good way to model disturbance or not.
     ]
   ]
-  ask patches [ set pcolor 53 + (env / 5) ]   ; Again, cosmetic
+  ;ask patches [ set pcolor 53 + (env / 5) ]   ; Again, cosmetic
+  ask patches [set pcolor scale-color 53 env -10 30 ]
 end
 
 to dispersal
