@@ -21,7 +21,7 @@ to setup
   ask patches[
     ; Continuous-ish environment, would something more binary work better?
     set env random 20
-    set pcolor 53 + (env / 5)
+    set pcolor 53 + (env / 5) ; Just cosmetic, so that we can actually visualize what each patch's environment is like
   ]
   
   create-beetles 10 [
@@ -47,7 +47,7 @@ to disturbance
       set env (env + random-normal 0 1)   ; Env value changes by a random number, drawn from a normal distribution, mean of 0 (nothing changes), SD of 1. No idea if this is a good way to model disturbance or not.
     ]
   ]
-  ask patches [ set pcolor 53 + (env / 5) ]   ; Just cosmetic, so that we can actually visualize what each patch's environment is like
+  ask patches [ set pcolor 53 + (env / 5) ]   ; Again, cosmetic
 end
 
 to dispersal
@@ -56,8 +56,8 @@ to dispersal
     pen-down
     ; HABITAT SELECTION
     ; What about 'uphill/downhill'? The NetLogo Dictionary has some interesting code, which I'll try adapting here:
-    ; So right now, they move towards the patch with the lowest 'env' value
-    let best-target min-one-of patches in-radius search-radius [env]
+    ; So right now, they move towards the patch with the lowest 'env' value (darkest on the map)
+    let best-target min-one-of patches in-radius search-radius [env]  ; search-radius is a slider
     if ([env] of best-target) < ([env] of patch-here) [
       face best-target
       forward 1 ; Can adjust this speed of movement, for the lag/delay stuff. OR, create a timer.
